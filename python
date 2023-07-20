@@ -1,0 +1,53 @@
+import time
+import tkinter as tk
+from tkinter import messagebox
+
+# Global variables
+countdown_time = 0
+running = False
+
+def countdown():
+    global countdown_time, running
+    while countdown_time and running:
+        mins, secs = divmod(countdown_time, 60)
+        hours, mins = divmod(mins, 60)
+
+        timer = '{:02d}:{:02d}:{:02d}'.format(hours, mins, secs)
+        label.config(text=timer)
+        root.update()
+        time.sleep(1)
+        countdown_time -= 1
+
+    if running:
+        messagebox.showinfo("Countdown Timer", "Countdown Finished!")
+
+def start_countdown():
+    global countdown_time, running
+    try:
+        countdown_time = int(entry.get())
+        running = True
+        countdown()
+    except ValueError:
+        messagebox.showerror("Error", "Invalid input. Please enter a positive integer.")
+
+def stop_countdown():
+    global running
+    running = False
+
+root = tk.Tk()
+root.title("Countdown Timer")
+
+label = tk.Label(root, font=("Helvetica", 48))
+label.pack(pady=20)
+
+entry = tk.Entry(root, font=("Helvetica", 24))
+entry.pack(pady=10)
+
+start_button = tk.Button(root, text="Start", command=start_countdown)
+start_button.pack(pady=5)
+
+stop_button = tk.Button(root, text="Stop", command=stop_countdown)
+stop_button.pack(pady=5)
+
+root.mainloop()
+
